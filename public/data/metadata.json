@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "ca2c40235b62",
+  "recordCount": 3979,
+  "timelineStart": "2009-10-30",
+  "startDate": "2010-06-02",
+  "latestTradingDate": "2026-10-23",
+  "generatedAt": "2026-10-24T20:57:00+08:00",
+  "lastUpdate": {
+    "status": "success",
+    "runAt": "2026-10-24T20:57:00+08:00",
+    "message": "首次初始化：3979 条记录"
+  },
+  "coverageNote": "补充源（eastmoney）本次不可达，2009-10-30 → 2010-06-01 区间未补齐：创业板指数(399006) 日线 请求失败（已重试 6 次）：fetch failed / other side closed",
+  "indices": {
+    "chinext": {
+      "name": "创业板指数",
+      "code": "399006",
+      "market": "SZ",
+      "providerSymbol": "0.399006",
+      "firstDate": "2010-06-02",
+      "lastDate": "2026-10-23",
+      "recordCount": 3979,
+      "sourceFirstDate": "2010-06-02",
+      "sourceLastDate": "2026-10-23",
+      "note": "创业板指数 2010-06-01 正式发布（基日 2010-05-31、基点 1000）。2009-10-30 至 2010-05-31 无可核实点位，按规则留空，不编造。"
+    },
+    "dividend": {
+      "name": "中证红利指数",
+      "code": "000922",
+      "market": "SH",
+      "providerSymbol": "1.000922",
+      "firstDate": "2010-06-02",
+      "lastDate": "2026-10-23",
+      "recordCount": 3979,
+      "sourceFirstDate": "2009-10-30",
+      "sourceLastDate": "2026-10-23",
+      "note": "中证红利指数数据源可覆盖至 2005 年以前，本项目自 2009-10-30 时间轴起点开始取数。"
+    }
+  },
+  "provider": {
+    "id": "tencent",
+    "name": "腾讯财经行情接口（web.ifzq.gtimg.cn）",
+    "endpoint": "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get",
+    "terms": "公开网页行情接口，无需密钥。本项目仅缓存日收盘点位用于个人研究与展示，不分发原始数据。接口为非承诺性服务，可能变更或限流，故内置可替换适配层。",
+    "license": "行情数据版权归上海证券交易所 / 深圳证券交易所及数据提供方所有；本项目仅作个人研究用途。"
+  },
+  "method": {
+    "ratioFormula": "ratio = chinextClose / dividendClose",
+    "ratioDecimals": 6,
+    "priceBasis": "日线收盘点位（不复权，指数点位本身无需复权）",
+    "calendarNote": "仅收录两个指数均有有效收盘的交易日的记录；周末、节假日不产生记录；当日未收盘的行情不采纳。"
+  },
+  "integrity": {
+    "duplicateDates": 0,
+    "invalidValues": 0,
+    "suspiciousGaps": [],
+    "maxCalendarGapDays": 11
+  }
+}

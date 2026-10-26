@@ -1,0 +1,12 @@
+# 依赖与构建产物
+node_modules/
+dist/
+tsconfig.tsbuildinfo
+
+# 本地工具与会话记录
+.edgeone/
+.workbuddy/
+
+# 杂项
+.DS_Store
+*.log

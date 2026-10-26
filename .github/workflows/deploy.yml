@@ -1,0 +1,52 @@
+name: 更新行情并部署
+
+# 每个交易日 16:10（北京时间 = UTC 08:10）抓取当日收盘数据并重新部署
+# 也支持手动触发；推送到 main 时同样会走一遍构建
+on:
+  schedule:
+    - cron: '10 8 * * 1-5'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+# 允许向 gh-pages 分支推送
+permissions:
+  contents: write
+
+# 同一时间只跑一个部署，避免两次提交互相覆盖
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 增量更新行情
+        run: npx tsx scripts/update-data.ts
+
+      - name: 校验数据完整性
+        run: npx tsx scripts/validate-data.ts
+
+      - name: 构建静态站点
+        run: npm run build
+
+      - name: 发布到 gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          commit_message: 'chore: 更新行情数据并部署'

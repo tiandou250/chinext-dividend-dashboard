@@ -1,0 +1,35 @@
+{
+  "name": "chinext-dividend-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "创业板 × 中证红利 相对强弱风格观察仪表盘",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc -b --noEmit false --emitDeclarationOnly false && tsc --noEmit -p tsconfig.app.json",
+    "data:init": "tsx scripts/initialize-data.ts",
+    "data:update": "tsx scripts/update-data.ts",
+    "data:validate": "tsx scripts/validate-data.ts"
+  },
+  "dependencies": {
+    "echarts": "5.5.1",
+    "framer-motion": "11.11.17",
+    "lucide-react": "0.454.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.9.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.3.3",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.17",
+    "tsx": "4.19.2",
+    "typescript": "5.6.3",
+    "vite": "5.4.11"
+  }
+}

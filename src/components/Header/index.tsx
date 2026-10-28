@@ -13,6 +13,8 @@ export interface HeaderProps {
   updatedAt: string | null;
   refreshing: boolean;
   onRefresh: () => void;
+  /** 浏览器端自动补齐的交易日；非空时状态条会说明数据是现场补的 */
+  liveAppended?: string[];
 }
 
 /**
@@ -28,6 +30,7 @@ export default function Header({
   updatedAt,
   refreshing,
   onRefresh,
+  liveAppended,
 }: HeaderProps) {
   const collapsed = useScrollCollapse(72);
 
@@ -104,6 +107,7 @@ export default function Header({
           updatedAt={updatedAt}
           refreshing={refreshing}
           onRefresh={onRefresh}
+          liveAppended={liveAppended}
           compact={collapsed}
         />
       </div>

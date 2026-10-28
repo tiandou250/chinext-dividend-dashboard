@@ -17,6 +17,8 @@ export interface StatusIndicatorProps {
   updatedAt?: string | null;
   refreshing: boolean;
   onRefresh: () => void;
+  /** 浏览器端自动补齐的交易日（快照落后时才有值） */
+  liveAppended?: string[];
   /** 顶栏收起时进入精简模式：只留"数据截至 + 状态 + 刷新" */
   compact?: boolean;
 }
@@ -41,6 +43,7 @@ export default function StatusIndicator({
   updatedAt,
   refreshing,
   onRefresh,
+  liveAppended = [],
   compact = false,
 }: StatusIndicatorProps) {
   return (
@@ -56,6 +59,21 @@ export default function StatusIndicator({
           数据截至 {latestTradingDate ?? '—'}（收盘）
         </span>
       </div>
+
+      {/* 快照落后、被现场补齐时明确标出来，不让读者以为静态文件已经刷新过 */}
+      {liveAppended.length > 0 && !compact ? (
+        <div
+          className="surface-chip flex items-center gap-1.5 rounded-full px-3 py-1.5"
+          title={`已用数据源现场补齐：${liveAppended.join('、')}`}
+        >
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold" aria-hidden />
+          <span className="whitespace-nowrap text-[12px] font-medium text-ink">
+            {liveAppended.length === 1
+              ? `现场补齐 ${liveAppended[0]!.slice(5)}`
+              : `现场补齐 ${liveAppended.length} 个交易日`}
+          </span>
+        </div>
+      ) : null}
 
       {/* 数据来源在收起时隐藏，让状态条只占一行 */}
       <div

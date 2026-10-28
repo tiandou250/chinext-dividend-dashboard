@@ -180,9 +180,10 @@ export default function InfoDialog({ open, onClose, metadata, recordCount }: Inf
                   <KV label="数据版本" value={metadata?.dataVersion ?? '—'} />
                 </div>
                 <p className="pt-1">
-                  更新由本地脚本在收盘后执行并生成静态快照，页面只读取快照。
-                  因此这里展示的是<strong className="text-ink">收盘后的历史数据</strong>，
-                  不是盘中实时行情，刷新按钮也不会触发任何行情拉取。
+                  快照由脚本在收盘后生成。若快照落后于最新交易日，页面会用<strong className="text-ink">同一数据源</strong>
+                  （腾讯日线接口）即时补齐缺口，并在顶栏标注「现场补齐」，因此不必等数据文件重新部署。
+                  两种来源都只取收盘值，当天 16:00 前不会入库，所以这里展示的始终是
+                  <strong className="text-ink">收盘后的历史数据</strong>，不是盘中行情。
                 </p>
               </Section>
 

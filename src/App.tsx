@@ -40,7 +40,8 @@ const RANGE_LABEL: Record<RangeKey, string> = {
 };
 
 export default function App() {
-  const { status, dataset, error, refreshing, refresh, lastRefreshFoundNewVersion } = useMarketData();
+  const { status, dataset, error, refreshing, refresh, lastRefreshFoundNewVersion, liveAppended } =
+    useMarketData();
   const isMobile = useMediaQuery('(max-width: 767px)');
   const reducedMotion = usePrefersReducedMotion();
 
@@ -206,6 +207,7 @@ export default function App() {
         updatedAt={metadata?.lastUpdate?.runAt ?? metadata?.generatedAt ?? null}
         refreshing={refreshing}
         onRefresh={refresh}
+        liveAppended={liveAppended}
       />
 
       <main

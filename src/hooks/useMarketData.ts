@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { loadDataset, MarketDataError, type LoadDatasetResult } from '@/services/marketData';
+import { syncLatestBars } from '@/services/marketData/liveSync';
 
 export interface MarketDataState {
   status: 'loading' | 'ready' | 'error';
@@ -10,6 +11,8 @@ export interface MarketDataState {
   refreshing: boolean;
   /** 本次刷新是否读到了新的数据版本 */
   lastRefreshFoundNewVersion: boolean | null;
+  /** 浏览器端自动补齐的交易日（快照落后时才有值） */
+  liveAppended: string[];
 }
 
 const INITIAL: MarketDataState = {
@@ -18,6 +21,7 @@ const INITIAL: MarketDataState = {
   error: null,
   refreshing: false,
   lastRefreshFoundNewVersion: null,
+  liveAppended: [],
 };
 
 export interface UseMarketDataResult extends MarketDataState {
@@ -26,8 +30,9 @@ export interface UseMarketDataResult extends MarketDataState {
 
 /**
  * 加载已部署的行情数据，并提供"重新检查数据版本"的刷新能力。
- * 刷新只重新读取 metadata.json 与（版本变化时的）historical.json，
- * 不会、也无法触发交易所行情更新。
+ *
+ * 读到快照后还会尝试用数据源接口补齐快照之后缺失的交易日 —— 静态文件只能靠外部任务刷新，
+ * 而外部定时任务不可靠，所以让页面自己兜底。补齐失败时静默回落到快照。
  */
 export function useMarketData(): UseMarketDataResult {
   const [state, setState] = useState<MarketDataState>(INITIAL);
@@ -46,7 +51,25 @@ export function useMarketData(): UseMarketDataResult {
     );
 
     try {
-      const dataset = await loadDataset({ refresh: mode === 'refresh', signal: controller.signal });
+      const loaded = await loadDataset({ refresh: mode === 'refresh', signal: controller.signal });
+
+      // 快照落后时用数据源补齐；无需补齐或补齐失败都原样返回
+      const synced = await syncLatestBars(loaded.records, controller.signal);
+      if (controller.signal.aborted) return;
+
+      const dataset: LoadDatasetResult =
+        synced.appended.length > 0
+          ? {
+              ...loaded,
+              records: synced.records,
+              metadata: {
+                ...loaded.metadata,
+                latestTradingDate: synced.appended[synced.appended.length - 1],
+                recordCount: synced.records.length,
+              },
+            }
+          : loaded;
+
       const prevVersion = datasetRef.current?.metadata.dataVersion ?? null;
       datasetRef.current = dataset;
 
@@ -57,6 +80,7 @@ export function useMarketData(): UseMarketDataResult {
         refreshing: false,
         lastRefreshFoundNewVersion:
           mode === 'refresh' ? prevVersion !== dataset.metadata.dataVersion : null,
+        liveAppended: synced.appended,
       });
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') return;
@@ -72,6 +96,7 @@ export function useMarketData(): UseMarketDataResult {
         error: { message, hint, code },
         refreshing: false,
         lastRefreshFoundNewVersion: null,
+        liveAppended: prev.liveAppended,
       }));
     }
   }, []);

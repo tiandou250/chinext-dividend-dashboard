@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "d1a87c7bb3b0",
-  "recordCount": 3983,
+  "dataVersion": "e949e2dafaf6",
+  "recordCount": 3984,
   "timelineStart": "2009-10-30",
   "startDate": "2010-06-02",
-  "latestTradingDate": "2026-10-29",
-  "generatedAt": "2026-10-29T23:11:00+08:00",
+  "latestTradingDate": "2026-10-30",
+  "generatedAt": "2026-10-30T23:00:00+08:00",
   "lastUpdate": {
     "status": "success",
-    "runAt": "2026-10-29T23:11:00+08:00",
-    "message": "新增 1 条，修订 0 条"
+    "runAt": "2026-10-30T23:00:00+08:00",
+    "message": "新增 2 条，修订 0 条"
   },
   "coverageNote": "补充源（eastmoney）本次不可达，2009-10-30 → 2010-06-01 区间未补齐：创业板指数(399006) 日线 请求失败（已重试 6 次）：fetch failed / other side closed",
   "indices": {
@@ -19,10 +19,10 @@
       "market": "SZ",
       "providerSymbol": "sz399006",
       "firstDate": "2010-06-02",
-      "lastDate": "2026-10-29",
-      "recordCount": 3983,
+      "lastDate": "2026-10-30",
+      "recordCount": 3984,
       "sourceFirstDate": "2010-06-02",
-      "sourceLastDate": "2026-10-29",
+      "sourceLastDate": "2026-10-30",
       "note": "创业板指数 2010-06-01 正式发布（基日 2010-05-31、基点 1000）。2009-10-30 至 2010-05-31 无可核实点位，按规则留空，不编造。"
     },
     "dividend": {
@@ -31,10 +31,10 @@
       "market": "SH",
       "providerSymbol": "sh000922",
       "firstDate": "2010-06-02",
-      "lastDate": "2026-10-29",
-      "recordCount": 3983,
+      "lastDate": "2026-10-30",
+      "recordCount": 3984,
       "sourceFirstDate": "2009-10-30",
-      "sourceLastDate": "2026-10-29",
+      "sourceLastDate": "2026-10-30",
       "note": "中证红利指数数据源可覆盖至 2005 年以前，本项目自 2009-10-30 时间轴起点开始取数。"
     }
   },
